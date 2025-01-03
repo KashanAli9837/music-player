@@ -40,18 +40,18 @@ const SongsList = ({ songs, setSongs, url }) => {
 
   return (
     <div className="flex-1 flex flex-col lg:flex-row p-4 gap-6">
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-4">
+      <div className="w-full lg:w-1/2 flex items-center justify-center md:p-4">
         <iframe
           src={`https://www.youtube.com/embed/${songUrl}?playlist=${songUrl}&enablejsapi=1&loop=1`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           referrerPolicy="strict-origin-when-cross-origin"
           allowFullScreen
-          className={`w-full md:w-[85%] lg:w-full xl:w-[80%] md:aspect-video h-[220px] md:h-auto rounded-lg`}
+          className="w-full max-w-[560px] aspect-video rounded-md"
         ></iframe>
       </div>
 
       <div className="w-full lg:w-1/2 flex-1 flex items-center justify-center">
-        <ul className="space-y-4 w-full md:w-[85%] bg-teal-50 rounded-lg shadow-lg p-6 overflow-y-auto max-h-[400px] scroll-smooth border border-teal-200">
+        <ul className="space-y-4 w-full md:w-[85%] bg-teal-50 rounded-lg shadow-lg p-2 md:p-4 overflow-y-auto max-w-[560px] max-h-[350px] sm:max-h-[400px] lg:max-h-[450px] scroll-smooth border border-teal-200">
           {songs.map(({ _id: id, name, url }) => (
             <li
               key={id}
@@ -60,16 +60,18 @@ const SongsList = ({ songs, setSongs, url }) => {
               }`}
               onClick={() => setSongUrl(url)}
             >
-              <span className="text-gray-800 font-medium text-lg">{name}</span>
-              <div className="flex gap-2 items-center">
+              <span className="text-gray-800 font-medium text-base md:text-lg">
+                {name}
+              </span>
+              <div className="flex gap-2 items-center text-base md:text-[24px]">
                 <button
                   className="text-red-400"
                   onClick={() => handleDelete(id)}
                 >
-                  <HiOutlineTrash size={24} />
+                  <HiOutlineTrash />
                 </button>
                 <Link href={`/edit-music/${id}`}>
-                  <FiEdit3 size={24} className="text-teal-300" />
+                  <FiEdit3 className="text-teal-300" />
                 </Link>
               </div>
             </li>
