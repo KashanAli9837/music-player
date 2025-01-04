@@ -17,6 +17,8 @@ const Page = () => {
     })();
   }
 
+  console.log("hello")
+
   if (songs) {
     return (
       <SongsList
