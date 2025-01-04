@@ -6,23 +6,29 @@ import { FiEdit3 } from "react-icons/fi";
 import { useState } from "react";
 import Loader from "./Loader";
 import Link from "next/link";
+import axios from "axios";
 
 const SongsList = ({ songs, songUrl, setSongUrl }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const deleteSong = async (id) => {
-    await fetch(`${window.location.origin}/api/songs?id=${id}`, {
-      method: "DELETE",
-    });
-    setLoading(false);
-    router.refresh();
-    setSongUrl(songs[0]?.url);
+    setLoading(true);
+    try {
+      await axios.delete(`${window.location.origin}/api/songs`, {
+        params: { id },
+      });
+      setSongUrl(songs[0]?.url);
+      router.refresh();
+    } catch (error) {
+      console.error("Failed to delete song:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDelete = (id) => {
-    const confirmed = confirm("Are you sure you want to delete this song?");
-    if (confirmed) {
+    if (confirm("Are you sure you want to delete this song?")) {
       deleteSong(id);
     }
   };

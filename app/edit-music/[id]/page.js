@@ -1,44 +1,69 @@
 "use client";
 
-import useWebsiteUrl from "@/hooks/useWebsiteUrl";
-import { useEffect, useState } from "react";
-import Loader from "@/components/Loader";
+import ErrorMessage from "@/components/Error";
 import EditSong from "@/components/EditSong";
-import fetchData from "@/utils/fetchData";
+import Loader from "@/components/Loader";
 
-const page = ({ params }) => {
-  const [id, setId] = useState(null);
-  const [song, setSong] = useState(null);
-  const websiteUrl = useWebsiteUrl();
+import { useEffect, useState } from "react";
+import axios from "axios";
 
+const Page = ({ params }) => {
+  const [state, setState] = useState({
+    song: null,
+    loading: true,
+    error: null,
+  });
+
+  // Get the id from params
   useEffect(() => {
     const fetchParams = async () => {
       try {
         const resolvedParams = await params;
         if (resolvedParams && resolvedParams.id) {
-          setId(() => resolvedParams.id);
+          await getSong(resolvedParams.id);
         }
       } catch (err) {
         console.error("Error resolving params:", err);
+        setState({
+          ...state,
+          loading: false,
+          error: "Failed to resolve parameters.",
+        });
       }
     };
 
     fetchParams();
   }, [params]);
 
-  if (id && websiteUrl) {
-    (async () => {
-      const url = `${websiteUrl}/api/songs/${id}`;
-      const song = await fetchData(url);
-      setSong(song);
-    })();
+  // Get the song after getting id
+  const getSong = async (id) => {
+    try {
+      const url = `${window.location.origin}/api/songs/${id}`;
+      const response = await axios.get(url);
+      setState({ song: response.data, loading: false, error: null });
+    } catch (err) {
+      console.error("Error fetching song:", err);
+      setState({ ...state, loading: false, error: "Failed to fetch song." });
+    }
+  };
+
+  const { song, loading, error } = state;
+
+  if (loading) {
+    return <Loader />;
   }
 
-  if (song) {
-    return <EditSong name={song?.name} url={song?.url} id={song?._id} />;
+  if (error) {
+    return <ErrorMessage error={error} />;
   }
 
-  return <Loader />;
+  return (
+    <EditSong
+      name={song?.name || "Untitled"}
+      url={song?.url || ""}
+      id={song?._id || null}
+    />
+  );
 };
 
-export default page;
+export default Page;

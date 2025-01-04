@@ -3,8 +3,9 @@ import ErrorMessage from "@/components/Error";
 import Loader from "@/components/Loader";
 import useSWR from "swr";
 import Main from "@/components/Main";
+import axios from "axios";
 
-const fetcher = (url) => fetch(url).then((r) => r.json());
+const fetcher = (url) => axios.get(url).then((r) => r.data);
 
 const Page = () => {
   const { data, error, isLoading } = useSWR("/api/songs", fetcher);

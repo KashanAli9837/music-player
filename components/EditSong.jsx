@@ -1,13 +1,13 @@
 "use client";
-import useWebsiteUrl from "@/hooks/useWebsiteUrl";
-import fetchData from "@/utils/fetchData";
+
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import axios from "axios";
 
 const EditSong = ({ name, url, id }) => {
-  const websiteUrl = useWebsiteUrl();
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     name,
     url,
@@ -17,21 +17,20 @@ const EditSong = ({ name, url, id }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
     try {
-      if (websiteUrl) {
-        const response = await fetchData(`${websiteUrl}/api/songs/${id}`, {
-          method: "PUT",
-          body: JSON.stringify(formData),
-        });
-
-        if (response) {
-          setLoading(false);
-          router.push("/");
-        }
+      const url = `${window.location.origin}/api/songs/${id}`;
+      const response = await axios.put(url, formData);
+      if (response.status === 200) {
+        setFormData({ name: "", url: "" });
+        router.push("/");
       }
     } catch (error) {
-      throw new Error(error);
+      setError("Failed to update the song. Please try again.");
+      console.error("Error updating song:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -47,12 +46,14 @@ const EditSong = ({ name, url, id }) => {
   return (
     <div className="flex justify-center items-center flex-1 p-4">
       <form
-        onSubmit={handleSubmit} // Attach the submit handler
+        onSubmit={handleSubmit}
         className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md space-y-6 border border-gray-300"
       >
         <h2 className="text-3xl font-bold text-center text-teal-600 mb-4">
           Update the Song
         </h2>
+
+        {error && <div className="text-red-500 text-center">{error}</div>}
 
         <div>
           <label
@@ -66,8 +67,8 @@ const EditSong = ({ name, url, id }) => {
             name="name"
             type="text"
             placeholder="Enter song name"
-            value={formData.name} // Bind the input value to state
-            onChange={handleChange} // Update state on change
+            value={formData.name}
+            onChange={handleChange}
             className="text-gray-800 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200 w-full"
             required
             maxLength={30}
@@ -88,8 +89,8 @@ const EditSong = ({ name, url, id }) => {
             name="url"
             type="text"
             placeholder="Enter song URL"
-            value={formData.url} // Bind the input value to state
-            onChange={handleChange} // Update state on change
+            value={formData.url}
+            onChange={handleChange}
             className="border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200 w-full"
             required
             maxLength={11}

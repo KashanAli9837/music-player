@@ -1,44 +1,34 @@
 "use client";
 
-import useWebsiteUrl from "@/hooks/useWebsiteUrl";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const Page = () => {
-  const websiteUrl = useWebsiteUrl();
   const router = useRouter();
-
-  // State to hold the input values in a single object
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     url: "",
   });
 
-  const [loading, setLoading] = useState(false);
-
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(null);
 
     try {
-      if (websiteUrl) {
-        const response = await fetch(`${websiteUrl}/api/songs/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to add the Song!");
-        }
-
+      const url = `${window.location.origin}/api/songs`;
+      const response = await axios.post(url, formData);
+      if (response.status === 201) {
+        setFormData({ name: "", url: "" });
         router.push("/");
       }
     } catch (error) {
-      throw new Error(error);
+      setError("Failed to update the song. Please try again.");
+      console.error("Error updating song:", error);
     } finally {
       setLoading(false);
     }
@@ -62,6 +52,8 @@ const Page = () => {
         <h2 className="text-3xl font-bold text-center text-teal-600 mb-4">
           Add a New Song
         </h2>
+
+        {error && <div className="text-red-500 text-center">{error}</div>}
 
         <div>
           <label
