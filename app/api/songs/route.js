@@ -44,7 +44,7 @@ export async function GET() {
     const songs = await Song.find();
 
     // Return success response
-    return NextResponse.json({ songs }, { status: 200 });
+    return NextResponse.json(songs, { status: 200 });
   } catch (error) {
     console.error("Error getting songs:", error);
     return NextResponse.json(
