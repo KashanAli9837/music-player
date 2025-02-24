@@ -1,65 +1,55 @@
 "use client";
+// import { useState } from "react";
+// import Loader from "./Loader";
 
-import { HiOutlineTrash } from "react-icons/hi";
-import { useRouter } from "next/navigation";
-import { FiEdit3 } from "react-icons/fi";
-import { useState } from "react";
-import Loader from "./Loader";
-import Link from "next/link";
-import axios from "axios";
+const SongsList = ({ songs, songUrl, setSongUrl, setSongIndex }) => {
+  // const [loading, setLoading] = useState(false);
 
-const SongsList = ({ songs, songUrl, setSongUrl }) => {
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  // const deleteSong = async (id) => {
+  //   setLoading(true);
+  //   try {
+  //     await axios.delete(`${window.location.origin}/api/songs`, {
+  //       params: { id },
+  //     });
+  //     setSongUrl(songs[0]?.url);
+  //     router.refresh();
+  //   } catch (error) {
+  //     console.error("Failed to delete song:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  const deleteSong = async (id) => {
-    setLoading(true);
-    try {
-      await axios.delete(`${window.location.origin}/api/songs`, {
-        params: { id },
-      });
-      setSongUrl(songs[0]?.url);
-      router.refresh();
-    } catch (error) {
-      console.error("Failed to delete song:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const handleDelete = (id) => {
+  //   if (confirm("Are you sure you want to delete this song?")) {
+  //     deleteSong(id);
+  //   }
+  // };
 
-  const handleDelete = (id) => {
-    if (confirm("Are you sure you want to delete this song?")) {
-      deleteSong(id);
-    }
-  };
+  // if (loading) return <Loader />;
 
-  if (loading) return <Loader />;
+  const handleClick = (url, i) => {
+    setSongUrl(url);
+    setSongIndex(i);
+  }
 
   return (
     <div className="w-full lg:w-1/2 flex-1 flex items-center justify-center">
-      <ul className="space-y-4 w-full md:w-[85%] bg-teal-50 rounded-lg shadow-lg p-2 md:p-4 overflow-y-auto max-w-[560px] max-h-[350px] sm:max-h-[400px] lg:max-h-[450px] scroll-smooth border border-teal-200">
-        {songs.map(({ _id: id, name, url }) => (
-          <li
-            key={id}
-            className={`w-full cursor-pointer flex items-center justify-between p-4 rounded-md shadow-md hover:bg-teal-500 transition duration-200 ${
-              url === songUrl ? "bg-teal-400" : "bg-white"
+      <div className="bg-[#E6EDFD] text-gray-500 w-full md:w-[85%] p-4 overflow-y-auto rounded-lg shadow-lg max-w-[560px] flex-1 max-h-[350px] sm:max-h-[400px] lg:max-h-[450px] songsContainer space-y-1">
+        {songs.map(({ _id, name, url }, i) => (
+          <div
+            key={_id}
+            className={`cursor-pointer p-4 rounded-md hover:bg-gray-200 transition duration-200 ${
+              url === songUrl ? "bg-[#D2DEF4]" : "bg-transparent"
             }`}
-            onClick={() => setSongUrl(url)}
+            onClick={() => handleClick(url, i)}
           >
-            <span className="text-gray-800 font-medium text-base md:text-lg">
+            <p className="text-gray-600 font-medium text-base md:text-lg">
               {name}
-            </span>
-            <div className="flex gap-2 items-center text-base md:text-[24px]">
-              <button className="text-red-400" onClick={() => handleDelete(id)}>
-                <HiOutlineTrash />
-              </button>
-              <Link href={`/edit-music/${id}`}>
-                <FiEdit3 className="text-teal-300" />
-              </Link>
-            </div>
-          </li>
+            </p>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
