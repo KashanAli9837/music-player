@@ -1,11 +1,13 @@
 "use client";
 
 import SongsList from "./SongsList";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Video from "./video";
+import useSongIndex from "@/hooks/useSongIndex";
 
 const Main = ({ songs }) => {
-  const [songUrl, setSongUrl] = useState(songs[0]?.url);
+  const [songIndex, setSongIndex] = useSongIndex(0);
+  const [songUrl, setSongUrl] = useState(songs[songIndex]?.url);
 
   if (songs.length === 0) {
     return (
@@ -22,6 +24,7 @@ const Main = ({ songs }) => {
         songs={songs}
         songUrl={songUrl}
         setSongUrl={setSongUrl}
+        setSongIndex={setSongIndex}
       />
     </div>
   );

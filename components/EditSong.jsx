@@ -47,9 +47,9 @@ const EditSong = ({ name, url, id }) => {
     <div className="flex justify-center items-center flex-1 p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md space-y-6 border border-gray-300"
+        className="bg-[#E6EDFD] shadow-lg rounded-lg p-8 w-full max-w-md flex flex-col gap-6 text-gray-500"
       >
-        <h2 className="text-3xl font-bold text-center text-teal-600 mb-4">
+        <h2 className="text-3xl font-bold text-center text-gray-600 mb-2">
           Update the Song
         </h2>
 
@@ -57,7 +57,7 @@ const EditSong = ({ name, url, id }) => {
 
         <div>
           <label
-            className="block text-gray-800 text-sm font-semibold mb-1"
+            className="block text-sm font-semibold mb-1"
             htmlFor="name"
           >
             Song Name
@@ -69,7 +69,7 @@ const EditSong = ({ name, url, id }) => {
             placeholder="Enter song name"
             value={formData.name}
             onChange={handleChange}
-            className="text-gray-800 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200 w-full"
+            className="text-gray-800 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 bg-transparent focus:ring-gray-400 transition duration-200 w-full"
             required
             maxLength={30}
             autoComplete="off"
@@ -79,7 +79,7 @@ const EditSong = ({ name, url, id }) => {
 
         <div>
           <label
-            className="block text-gray-800 text-sm font-semibold mb-1"
+            className="block text-sm font-semibold mb-1"
             htmlFor="url"
           >
             Song URL
@@ -91,7 +91,7 @@ const EditSong = ({ name, url, id }) => {
             placeholder="Enter song URL"
             value={formData.url}
             onChange={handleChange}
-            className="border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500 transition duration-200 w-full"
+            className="text-gray-800 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 bg-transparent focus:ring-gray-400 transition duration-200 w-full"
             required
             maxLength={11}
             autoComplete="off"
@@ -100,7 +100,7 @@ const EditSong = ({ name, url, id }) => {
         </div>
 
         <button
-          className={`bg-teal-500 font-bold text-white rounded-lg px-6 py-3 transition duration-300 hover:bg-teal-600 w-full shadow-md hover:shadow-lg ${
+          className={`bg-teal-500 font-bold text-white rounded-lg px-6 py-3 transition duration-300 hover:bg-teal-600 w-full shadow-md hover:shadow-lg mt-3 ${
             loading ? "opacity-50 cursor-not-allowed" : ""
           }`}
           type="submit"

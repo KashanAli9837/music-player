@@ -13,20 +13,16 @@ body {
   height: 100%;
 }
 
-::-webkit-scrollbar {
-  width: 10px; /* Width of the scrollbar */
+.songsContainer::-webkit-scrollbar {
+  width: 11px;
+  background-color: transparent;
+  border-radius: 8px;
 }
 
-::-webkit-scrollbar-track {
-  background: #f0fdfa; /* Background of the scrollbar track */
-  border-radius: 10px; /* Rounded corners for the track */
+.songsContainer::-webkit-scrollbar-thumb {
+  background-color: transparent;  border-radius: 8px;
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgb(45, 212, 191); /* Color of the scrollbar thumb */
-  border-radius: 10px; /* Rounded corners for the thumb */
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgb(20, 184, 166); /* Color of the thumb on hover */
+.songsContainer:hover::-webkit-scrollbar-thumb{
+  background-color: rgb(107, 144, 128);
 }
